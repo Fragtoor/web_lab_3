@@ -21,7 +21,6 @@ import java.util.Locale;
 public class AreaCheckServlet extends HttpServlet {
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -72,50 +71,9 @@ public class AreaCheckServlet extends HttpServlet {
             errorMessage = e.getMessage();
         }
 
-        response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
-        out.println("<!DOCTYPE html><html lang='ru'><head><meta charset='UTF-8'><title>Результат</title>");
-        out.println("<link rel='stylesheet' href='" + request.getContextPath() + "/css/style.css'>");
-        out.println("</head><body>");
-        out.println("<table class='layout-table'><tr><td id='header'>Результат проверки попадания точки в область</td></tr>");
-        out.println("<tr><td class='content-cell'>");
-
-        if (errorMessage != null) {
-            out.println("<p style='color: red; text-align: center; font-weight: bold;'>" + errorMessage + "</p>");
-        } else {
-            out.println("<table class='results-table'>");
-            out.println("<thead><tr><th>X</th><th>Y</th><th>R</th><th>Результат</th><th>Текущее время</th><th>Время выполнения</th></tr></thead><tbody>");
-            for (PointResult pt : currentBatch) {
-                String color = pt.isHit() ? "green" : "red";
-                String text = pt.isHit() ? "Попадание" : "Промах";
-                out.println("<tr>");
-                out.println("<td>" + pt.getX() + "</td>");
-                out.println("<td>" + pt.getY() + "</td>");
-                out.println("<td>" + pt.getR() + "</td>");
-                out.println("<td style='color: " + color + "; font-weight: bold;'>" + text + "</td>");
-                out.println("<td class='local-time' data-utc='" + pt.getCurrentTime() + "'></td>");
-                out.println("<td>" + pt.getExecutionTime() + "</td>");
-                out.println("</tr>");
-            }
-            out.println("</tbody></table>");
-        }
-
-        out.println("<div style='text-align: center; margin-top: 25px;'>");
-        out.println("<a href='" + request.getContextPath() + "/controller' class='back-link'>Вернуться к веб-форме</a>");
-        out.println("</div></td></tr></table>");
-
-        out.println("<script>");
-        out.println("document.querySelectorAll('.local-time').forEach(el => {");
-        out.println("  const utcTime = el.getAttribute('data-utc');");
-        out.println("  const date = new Date(utcTime);");
-        out.println("  if (!isNaN(date)) {");
-        out.println("    el.textContent = new Intl.DateTimeFormat('ru-RU', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(date);");
-        out.println("  } else { el.textContent = utcTime; }");
-        out.println("});");
-        out.println("</script>");
-
-        out.println("</body></html>");
+        request.setAttribute("currentBatch", currentBatch);
+        request.setAttribute("errorMessage", errorMessage);
+        request.getRequestDispatcher("/WEB-INF/result.jsp").forward(request, response);
     }
 
     private boolean isValidR(double r) {
