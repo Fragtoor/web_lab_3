@@ -3,7 +3,6 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="ru.itmo.web.model.PointResult" %>
 <%
-    @SuppressWarnings("unchecked")
     List<PointResult> results = (List<PointResult>) application.getAttribute("results");
 %>
 <!DOCTYPE html>
@@ -33,7 +32,7 @@
             <td class="content-cell">
                 <form id="pointForm" method="GET" action="${pageContext.request.contextPath}/controller">
                     <div>
-                        <strong>Изменение X (Checkbox):</strong>
+                        <strong>Изменение X:</strong>
                         <br>
                         <label><input type="checkbox" name="x" value="-2"> -2</label>
                         <label><input type="checkbox" name="x" value="-1.5"> -1.5</label>
@@ -57,7 +56,7 @@
                     <br>
 
                     <div>
-                        <strong>Изменение R (Button):</strong>
+                        <strong>Изменение R:</strong>
                         <br>
                         <input type="hidden" id="r-val" name="r" value="">
                         <input type="button" class="r-btn" value="1" onclick="setR(1, this)">
