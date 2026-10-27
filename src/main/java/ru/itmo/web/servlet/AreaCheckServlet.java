@@ -24,7 +24,7 @@ public class AreaCheckServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if (!Boolean.TRUE.equals(request.getAttribute("fromController"))) {
+        if (request.getDispatcherType() != DispatcherType.FORWARD) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Прямой доступ запрещен");
             return;
         }
