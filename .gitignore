@@ -1,0 +1,6 @@
+target/
+*.war
+*.class
+wildfly-26.1.3.Final
+pom.xml
+*.log
